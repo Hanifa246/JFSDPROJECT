@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 1rem;
+        }
+        .actions {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Department Management</h1>
+
+    <h2>Add Department</h2>
+    <form id="addDepartmentForm">
+        <label for="name">Department Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+
+        <label for="hodName">Head of Department:</label>
+        <input type="text" id="hodName" name="hodName" required>
+
+        <button type="submit">Add Department</button>
+    </form>
+
+    <h2>Delete Department</h2>
+    <form id="deleteDepartmentForm">
+        <label for="departmentId">Department ID:</label>
+        <input type="number" id="departmentId" name="departmentId" required>
+
+        <button type="submit">Delete Department</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+        document.getElementById('addDepartmentForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const location = document.getElementById('location').value;
+            const hodName = document.getElementById('hodName').value;
+
+            const response = await fetch('/addDepartment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, location, hodName })
+            });
+
+            const result = await response.text();
+            document.getElementById('message').innerText = result;
+        });
+
+        document.getElementById('deleteDepartmentForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const departmentId = document.getElementById('departmentId').value;
+
+            const response = await fetch('/deleteDepartment', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ departmentId })
+            });
+
+            const result = await response.text();
+            document.getElementById('message').innerText = result;
+        });
+    </script>
+</body>
+</html>
